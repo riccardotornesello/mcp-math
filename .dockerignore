@@ -1,0 +1,30 @@
+# Git files
+.git
+.gitignore
+
+# Build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+mcp-math
+*.test
+*.out
+
+# Vendor directory (included in Docker image but not in source control)
+# vendor/
+
+# Documentation
+README.md
+LICENSE
+
+# Go workspace
+go.work
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~

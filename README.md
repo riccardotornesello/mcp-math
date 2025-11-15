@@ -31,7 +31,25 @@ This MCP server provides 14 mathematical tools organized into the following cate
 ## Installation
 
 ### Prerequisites
-- Go 1.25.4 or higher
+- Go 1.25.4 or higher (for building from source)
+- Docker (for running with Docker)
+
+### Using Docker (Recommended)
+
+Pull the image from GitHub Container Registry:
+```bash
+docker pull ghcr.io/riccardotornesello/mcp-math:latest
+```
+
+Or from Docker Hub:
+```bash
+docker pull riccardotornesello/mcp-math:latest
+```
+
+Run the container:
+```bash
+docker run -d -p 8080:8080 ghcr.io/riccardotornesello/mcp-math:latest
+```
 
 ### Build from Source
 ```bash
@@ -40,14 +58,33 @@ cd mcp-math
 go build
 ```
 
+### Build Docker Image Locally
+```bash
+git clone https://github.com/riccardotornesello/mcp-math.git
+cd mcp-math
+go mod vendor
+docker build -t mcp-math .
+docker run -d -p 8080:8080 mcp-math
+```
+
 ## Usage
 
+### Running with Docker
+```bash
+# Pull and run the latest image
+docker run -d -p 8080:8080 ghcr.io/riccardotornesello/mcp-math:latest
+
+# The server will start and listen on port 8080
+# Access it at http://localhost:8080/mcp
+```
+
+### Running from Binary
 Start the MCP Math server:
 ```bash
 ./mcp-math
 ```
 
-The server will start and listen for MCP protocol messages via standard input/output.
+The server will start and listen for MCP protocol messages via HTTP on port 8080.
 
 ## Tool Reference
 
@@ -138,3 +175,28 @@ This project is licensed under the terms specified in the repository.
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Docker Images
+
+Docker images are automatically built and published to both GitHub Container Registry and Docker Hub on every release:
+
+- **GitHub Container Registry**: `ghcr.io/riccardotornesello/mcp-math`
+- **Docker Hub**: `riccardotornesello/mcp-math`
+
+Images are tagged with:
+- `latest` - Latest stable release
+- `vX.Y.Z` - Specific version (e.g., `v1.0.0`)
+- `X.Y` - Major.Minor version (e.g., `1.0`)
+- `X` - Major version (e.g., `1`)
+
+### CI/CD
+
+The project uses GitHub Actions to automatically build and push Docker images to both registries when a new release is published. To trigger a build:
+
+1. Create a new release on GitHub
+2. The workflow will automatically:
+   - Vendor Go dependencies
+   - Build the Docker image
+   - Push to GitHub Container Registry
+   - Push to Docker Hub (requires `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets)
+
