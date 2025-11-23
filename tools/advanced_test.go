@@ -50,7 +50,7 @@ func TestRoot(t *testing.T) {
 		{"root of 0", RootInput{Number: 0, N: 2}, 0, false},
 		{"zero root degree", RootInput{Number: 16, N: 0}, 0, true},
 		{"decimal number", RootInput{Number: 6.25, N: 2}, 2.5, false},
-		{"decimal root degree", RootInput{Number: 16, N: 2.5}, 0, false}, // specific value check below
+		{"decimal root degree", RootInput{Number: 16, N: 2.5}, math.Pow(16, 1.0/2.5), false},
 	}
 
 	for _, tt := range tests {
@@ -64,17 +64,9 @@ func TestRoot(t *testing.T) {
 				if err != nil {
 					t.Errorf("unexpected error: %v", err)
 				}
-				// For the decimal root degree test, we need special handling
-				if tt.name == "decimal root degree" {
-					// 16^(1/2.5) = 16^0.4 ≈ 3.0314...
-					if math.Abs(result.Result-math.Pow(16, 1.0/2.5)) > 1e-9 {
-						t.Errorf("Root(%v, %v) = %v, want %v", tt.input.Number, tt.input.N, result.Result, math.Pow(16, 1.0/2.5))
-					}
-				} else {
-					// Use a small epsilon for floating point comparison
-					if math.Abs(result.Result-tt.expected) > 1e-9 {
-						t.Errorf("Root(%v, %v) = %v, want %v", tt.input.Number, tt.input.N, result.Result, tt.expected)
-					}
+				// Use a small epsilon for floating point comparison
+				if math.Abs(result.Result-tt.expected) > 1e-9 {
+					t.Errorf("Root(%v, %v) = %v, want %v", tt.input.Number, tt.input.N, result.Result, tt.expected)
 				}
 			}
 		})
