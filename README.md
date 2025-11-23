@@ -62,7 +62,6 @@ go build
 ```bash
 git clone https://github.com/riccardotornesello/mcp-math.git
 cd mcp-math
-go mod vendor
 docker build -t mcp-math .
 docker run -d -p 8080:8080 mcp-math
 ```
@@ -124,15 +123,6 @@ All trigonometric functions use radians for angle measurements.
 | **cos** | Calculates the cosine of an angle | `angle` (number in radians) |
 | **tan** | Calculates the tangent of an angle | `angle` (number in radians) |
 
-## Error Handling
-
-The following operations will return errors in specific cases:
-
-- **divide**: Returns an error when attempting to divide by zero
-- **modulo**: Returns an error when the divisor is zero
-- **root**: Returns an error when n (the root degree) is zero
-- **average**, **min**, **max**: Return errors when given empty arrays
-
 ## Development
 
 ### Project Structure
@@ -140,20 +130,8 @@ The following operations will return errors in specific cases:
 mcp-math/
 ├── main.go           # Server entry point and tool registration
 ├── tools/            # Individual tool implementations
-│   ├── sum.go
-│   ├── subtract.go
-│   ├── multiply.go
-│   ├── divide.go
-│   ├── modulo.go
-│   ├── sum_array.go
-│   ├── average.go
-│   ├── min.go
-│   ├── max.go
-│   ├── power.go
-│   ├── root.go
-│   ├── sin.go
-│   ├── cos.go
-│   └── tan.go
+│   ├── ...
+│   └── ...
 ├── go.mod
 └── README.md
 ```
@@ -186,17 +164,3 @@ Docker images are automatically built and published to both GitHub Container Reg
 Images are tagged with:
 - `latest` - Latest stable release
 - `vX.Y.Z` - Specific version (e.g., `v1.0.0`)
-- `X.Y` - Major.Minor version (e.g., `1.0`)
-- `X` - Major version (e.g., `1`)
-
-### CI/CD
-
-The project uses GitHub Actions to automatically build and push Docker images to both registries when a new release is published. To trigger a build:
-
-1. Create a new release on GitHub
-2. The workflow will automatically:
-   - Vendor Go dependencies
-   - Build the Docker image
-   - Push to GitHub Container Registry
-   - Push to Docker Hub (requires `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets)
-
