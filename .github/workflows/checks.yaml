@@ -1,0 +1,16 @@
+# CI workflow for running tests, linting, formatting checks, and Docker build tests
+
+name: Checks
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+# Limit permissions to minimum required for security
+permissions:
+  contents: read
+
+jobs:
+  # TODO: tests, linting, formatting checks can be added here
