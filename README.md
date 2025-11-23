@@ -75,7 +75,7 @@ docker run -d -p 8080:8080 mcp-math
 docker run -d -p 8080:8080 ghcr.io/riccardotornesello/mcp-math:latest
 
 # The server will start and listen on port 8080
-# Access it at http://localhost:8080/mcp
+# Access it at http://localhost:8080/
 ```
 
 ### Running from Binary

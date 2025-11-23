@@ -3,17 +3,18 @@ FROM golang:1.25 AS builder
 
 WORKDIR /app
 
-# Copy everything including vendor directory
+# Install modules
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy the source code
 COPY . .
 
-# Build the application as a static binary using vendor
-RUN CGO_ENABLED=0 GOOS=linux go build -mod=vendor -a -installsuffix cgo -ldflags="-w -s" -o mcp-math .
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -o mcp-math .
 
 # Final stage - use scratch for minimal image
 FROM scratch
-
-# Copy CA certificates from builder
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Copy the binary from builder
 COPY --from=builder /app/mcp-math /mcp-math

@@ -37,7 +37,7 @@ func main() {
 		func(*http.Request) *mcp.Server { return server },
 		&mcp.StreamableHTTPOptions{},
 	)
-	http.HandleFunc("/mcp", handler.ServeHTTP)
+	http.HandleFunc("/", handler.ServeHTTP)
 
 	log.Println("Starting MCP math server on :8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
