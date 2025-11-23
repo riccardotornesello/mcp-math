@@ -30,60 +30,32 @@ This MCP server provides 14 mathematical tools organized into the following cate
 
 ## Installation
 
-### Prerequisites
-- Go 1.25.4 or higher (for building from source)
-- Docker (for running with Docker)
+### Docker (Recommended)
 
-### Using Docker (Recommended)
-
-Pull the image from GitHub Container Registry:
+Pull and run the latest image:
 ```bash
 docker pull ghcr.io/riccardotornesello/mcp-math:latest
-```
-
-Or from Docker Hub:
-```bash
-docker pull riccardotornesello/mcp-math:latest
-```
-
-Run the container:
-```bash
 docker run -d -p 8080:8080 ghcr.io/riccardotornesello/mcp-math:latest
 ```
 
+The server will be accessible at `http://localhost:8080/`
+
+### From Binary
+
+Download the latest binary from the [releases page](https://github.com/riccardotornesello/mcp-math/releases), then run:
+```bash
+chmod +x mcp-math
+./mcp-math
+```
+
 ### Build from Source
+
 ```bash
 git clone https://github.com/riccardotornesello/mcp-math.git
 cd mcp-math
 go build
-```
-
-### Build Docker Image Locally
-```bash
-git clone https://github.com/riccardotornesello/mcp-math.git
-cd mcp-math
-docker build -t mcp-math .
-docker run -d -p 8080:8080 mcp-math
-```
-
-## Usage
-
-### Running with Docker
-```bash
-# Pull and run the latest image
-docker run -d -p 8080:8080 ghcr.io/riccardotornesello/mcp-math:latest
-
-# The server will start and listen on port 8080
-# Access it at http://localhost:8080/
-```
-
-### Running from Binary
-Start the MCP Math server:
-```bash
 ./mcp-math
 ```
-
-The server will start and listen for MCP protocol messages via HTTP on port 8080.
 
 ## Tool Reference
 
@@ -130,21 +102,42 @@ All trigonometric functions use radians for angle measurements.
 mcp-math/
 ├── main.go           # Server entry point and tool registration
 ├── tools/            # Individual tool implementations
-│   ├── ...
-│   └── ...
-├── go.mod
+├── Dockerfile        # Docker image configuration
+├── .github/
+│   └── workflows/    # CI/CD pipelines
 └── README.md
 ```
 
-### Building
+### Building and Testing
+
 ```bash
+# Format code
+go fmt ./...
+
+# Run linter
+go vet ./...
+
+# Build
 go build
+
+# Test Docker build
+docker build -t mcp-math .
 ```
 
-### Running
-```bash
-./mcp-math
-```
+## Release Process
+
+Releases are automated via GitHub Actions. When a new release is published:
+
+1. **Binary Build**: The Go binary is built and attached to the release
+2. **Docker Images**: Multi-platform images (amd64, arm64) are built and pushed to:
+   - GitHub Container Registry: `ghcr.io/riccardotornesello/mcp-math`
+   - Docker Hub: `riccardotornesello/mcp-math`
+3. **Tags**: Images are tagged with version numbers (e.g., `v1.0.0`, `1.0`, `1`, `latest`)
+
+To create a release:
+1. Create and push a new tag: `git tag v1.0.0 && git push origin v1.0.0`
+2. Create a release from the tag on GitHub
+3. The CI/CD pipeline will automatically build and publish artifacts
 
 ## License
 
@@ -153,14 +146,3 @@ This project is licensed under the terms specified in the repository.
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Docker Images
-
-Docker images are automatically built and published to both GitHub Container Registry and Docker Hub on every release:
-
-- **GitHub Container Registry**: `ghcr.io/riccardotornesello/mcp-math`
-- **Docker Hub**: `riccardotornesello/mcp-math`
-
-Images are tagged with:
-- `latest` - Latest stable release
-- `vX.Y.Z` - Specific version (e.g., `v1.0.0`)
