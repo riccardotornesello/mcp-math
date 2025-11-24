@@ -43,7 +43,7 @@ docker pull riccardotornesello/mcp-math:latest
 docker run -d -p 8080:8080 riccardotornesello/mcp-math:latest
 ```
 
-The server will be accessible at `http://localhost:8080/`
+The server will be accessible at `http://localhost:8080/mcp`
 
 ### From Binary
 
